@@ -32,26 +32,29 @@ window.PROJECTS = [
     kind: "Midnight Sun solar car",
     discipline: "Mechanical",
     year: "2026",
-    summary: "A bolt-on mount for the solar car's parking brake lever, taken from a waterjet aluminum bracket to a printed two-piece clamshell over seven revisions.",
+    summary: "A bolt-on mount for the solar car's parking brake lever, taken from a waterjet aluminum bracket to a printed two-piece clamshell over eight revisions.",
     body: `American Solar Challenge rules require a parking brake that holds the car in place and locks with one motion from the driver's seat. On MS16 the team used a bike brake pulled by a toggle clamp, and it only just passed scrutineering: slack crept into the cable, and the PLA mount kept sliding along the chassis tube.
 
 The holder mounts the toggle clamp at the bottom-front corner of the cockpit on the left side, where the front hoop leg, the side diagonal, the bottom rail and two chassis-base tubes meet. That spot is by the driver's left hand and on the same side as the bike brake, so the cable run stays short. Every revision keeps the same three goals: it can't slide on the tubes, the cable loop closes inside one rigid part so it holds tension, and it needs no welding.
 
-The revision history below shows each version and what changed from the one before.`,
+We sized everything from quick Fermi estimates: a hard one-handed push is about 10 kg, or 100 N, and the toggle clamp multiplies that about 3× into roughly 300 N of cable pull. The FEA then checked each design at 3× those loads.
+
+Revs A to D came out of the F26 dynamics design sprint, which I did with a six-person team. Revs E and F and the hardware swap are follow-up work after the sprint. The revision history below shows each version, why it changed, and how it compared.`,
     link: "",
     images: ["images/pb-revF-iso.png"],
     revisions: [
       {
         rev: "Rev A",
         date: "Oct 27",
-        title: "Waterjet aluminum bracket, clamped to two tubes",
-        why: "First answer to the MS16 problems: replace the sliding PLA mount with metal that can't move.",
+        title: "A bent aluminum bracket, clamped to two tubes",
+        why: "The MS16 cable kept going slack, and our thesis was that the mount was sliding or twisting on the chassis tube. The fix: lock the holder down so it has no freedom.",
         changes: [
-          "3/16\" 5052-H32 aluminum bracket, waterjet cut with two bends: web, lever shelf and a bent-up tab as the cable-housing stop.",
-          "Clamped with saddle caps to two tubes that run in different directions (one on the 1.5\" front leg, two on the 1.25\" diagonal), so the constraint comes from geometry rather than friction. Six #10-32 bolts, no welding.",
-          "Cable stop on the same part as the lever, plus an M10×1 barrel adjuster to take up slack before scrutineering.",
-          "About 375 g of parts plus 80 g of hardware."
+          "One 3/16\" 5052-H32 aluminum plate, waterjet cut and bent twice into a web, a lever shelf and a bent-up tab for the cable-housing stop.",
+          "Clamped with saddle caps to two tubes that run in different directions (one on the 1.5\" front leg, two on the 1.25\" diagonal), so it has zero degrees of freedom. The constraint comes from geometry, not friction. Six #10-32 bolts, no welding.",
+          "The cable stop sits on the same bracket as the lever, so the pull stays inside the part. An M10×1 barrel adjuster takes up slack before scrutineering.",
+          "Why it changed: FEA showed a small notch by the bend taking far more than the aluminum can handle. It would have bent at about 500 N."
         ],
+        stats: [["Parts", "6 metal"], ["Weight", "377 g"], ["Moves", "0.87 mm"], ["Withstands", "~500 N (bends)"]],
         images: [
           {src: "images/pb-revA-drivers-eye.png", caption: "Rev A from the driver's seat"},
           {src: "images/pb-revA-outboard.png", caption: "Rev A from outside: caps on two crossing tubes"}
@@ -60,42 +63,67 @@ The revision history below shows each version and what changed from the one befo
       {
         rev: "Rev B",
         date: "Oct 28",
-        title: "Stronger bracket and a bolted stop block",
-        why: "FEA at 900 N of cable tension found 344 MPa at the relief notch where the shelf ended, so Rev A would have yielded at roughly 500 N.",
+        title: "Thicker plate and a bolted stop",
+        why: "FEA at 900 N of cable tension found 344 MPa at the relief notch where the shelf ended, so we got rid of that bend entirely.",
         changes: [
-          "1/4\" sheet with one bend instead of 3/16\" with two.",
-          "Bent tab replaced by a separate solid stop block bolted to the shelf, so the cable load never goes around a bend or a notch.",
-          "Thicker tube caps (5–5.7 mm of wall over the tube) and fine-thread #8-36 clamp screws.",
-          "Result: 53 MPa peak at 900 N (about 3.6× margin to yield) and 0.05 mm deflection. A 300 N push on the handle dropped from 135 MPa (SF 1.4) to 85 MPa (SF 2.3).",
-          "About 545 g of machined parts."
+          "1/4\" plate with one bend instead of 3/16\" with two.",
+          "The cable stop became its own solid block bolted to the shelf, so the cable load never goes around a bend or a notch.",
+          "Thicker tube caps, and fine-thread #8-36 clamp screws because of vibration.",
+          "Result: the worst spot dropped from 344 MPa to 53 MPa, and it moves only 0.05 mm.",
+          "Why it changed: 7 metal parts to cut, bend and drill, at about 545 g. So we switched to 3D printing."
         ],
+        stats: [["Parts", "7 metal"], ["Weight", "~545 g"], ["Moves", "0.05 mm"], ["Withstands", "~3,300 N"]],
         images: [
           {src: "images/pb-revB-fea.png", caption: "von Mises stress at 900 N cable tension: Rev A (left) vs Rev B (right)"}
         ]
       },
       {
+        rev: "Rev C",
+        date: "",
+        title: "All 3D printed, in two pieces",
+        why: "Based on feedback from Meeji, we replaced the 7 metal parts with 2 printed ones.",
+        changes: [
+          "Two printed halves clamp around the bottom rail, the diagonal and the front leg, split through the tube centres.",
+          "The inboard FRONT piece wraps half of each tube and sits in the crease between them as a downward brace. The outboard BACK piece wraps the other half and holds the nuts.",
+          "2 parts and 5 bolts instead of 7 metal parts, with nothing to cut or bend, and the crease takes the push.",
+          "Why it changed: plastic is much weaker than aluminum in bending, and the shelf stuck out with nothing under it."
+        ],
+        stats: [["Parts", "2 printed + 5 bolts"], ["Weight", "~425 g"], ["Moves", "no FEA"]],
+        images: [
+          {src: "images/pb-revC2-cockpit.png", caption: "The printed clamshell from inside the cockpit"}
+        ]
+      },
+      {
         rev: "Rev C2",
         date: "Nov 2",
-        title: "3D-printed two-piece clamshell with a load rib",
+        title: "A rib under the handle",
         changes: [
-          "Switched from machined aluminum to two printed halves that clamp around the bottom rail, the diagonal and the front leg, split through the tube centres.",
-          "The inboard FRONT piece fills the V between the tubes so it's braced against the frame, and carries the lever shelf and cable stop. The outboard BACK piece holds the nuts.",
-          "New 10 mm triangular rib under the shelf at about 47°, so pushing the handle puts the rib in compression straight into the rail instead of bending the shelf root.",
-          "Five #10-32 bolts through both halves with a 1.5 mm gap at the split, so tightening clamps the tubes. Channels open up 2 mm near the node to clear the weld fillets.",
-          "Printed in PETG or tougher (not PLA, which softens and creeps)."
+          "Added a 10 mm rib under the handle side of the shelf, running down to the bottom tube at about 47°.",
+          "Pushing the handle now puts the rib in compression straight into the chassis instead of bending the shelf.",
+          "Five #10-32 bolts through both halves with a 1.5 mm gap at the split, so tightening clamps the tubes. The channels open up 2 mm near the node to clear the weld fillets.",
+          "Why it changed: the corners were steps instead of fillets, which concentrate stress, and the part was one huge boss extrude nobody could edit."
         ],
+        stats: [["Parts", "2 printed + 5 bolts"], ["Weight", "~425 g"], ["Moves", "no FEA"]],
         images: [
-          {src: "images/pb-revC2-cockpit.png", caption: "Rev C2 from inside the cockpit"},
           {src: "images/pb-revC2-rib.png", caption: "The load rib, seen from below"}
         ]
       },
       {
         rev: "Rev D",
         date: "Nov 5",
-        title: "Rebuilt as native SolidWorks parts and simulated",
+        title: "More ribs, rebuilt and simulated",
         changes: [
-          "FRONT and BACK modeled feature by feature in SolidWorks: tube channels, clamp gap, #10-32 bolt holes and counterbores, lever shelf, cable stop, load rib, #8-36 clamp screw holes and the M10×1 adjuster hole.",
-          "Simulated in printed PETG with a 300 N push on the handle and 900 N on the cable stop: about 4.7 MPa peak stress."
+          "Added two more ribs under the shelf (Rib1 and Rib2), so the handle push is shared between them.",
+          "Rebuilt both pieces feature by feature in SolidWorks, with filleted rib roots and editable features in place of the single boss extrude.",
+          "Same FEA test as before (300 N on the handle plus 900 N on the cable, in printed PETG): the FRONT now moves 0.13 mm instead of 0.15 mm, at 3× our Fermi loads. It takes about 8,200 N of cable pull before the plastic gives.",
+          "BACK piece with every bolt snugged: it moves 0.23 mm, and each bolt can take about 3,000 N before the plastic gives.",
+          "Still 2 printed pieces and 5 bolts. Nothing else had to change."
+        ],
+        stats: [["Parts", "2 printed + 5 bolts"], ["Weight", "~435 g + ribs"], ["Moves", "0.13 mm"], ["Withstands", "~8,200 N"]],
+        images: [
+          {src: "images/pb-revD-ribs.png", caption: "Rev D FRONT piece in SolidWorks, with the new ribs under the shelf"},
+          {src: "images/pb-revD-fea-front.png", caption: "FRONT piece FEA: 300 N on the handle and 900 N on the cable"},
+          {src: "images/pb-revD-fea-back.png", caption: "BACK piece FEA with the bolts tightened"}
         ]
       },
       {

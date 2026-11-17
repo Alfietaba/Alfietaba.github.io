@@ -99,7 +99,7 @@ function viewProject(p, i){
     footer()
   ];
 }
-/* Optional design history: p.revisions = [{ rev, date, title, changes: [..], why, images: [{src, caption}] }] */
+/* Optional design history: p.revisions = [{ rev, date, title, why, stats: [[label, value]], changes: [..], images: [{src, caption}] }] */
 function revisions(p){
   var revs = Array.isArray(p.revisions) ? p.revisions.filter(function(r){ return r && s(r.title); }) : [];
   if (!revs.length) return null;
@@ -108,11 +108,13 @@ function revisions(p){
     revs.map(function(r){
       var pics = Array.isArray(r.images) ? r.images.filter(function(im){ return im && s(im.src); }) : [];
       var changes = Array.isArray(r.changes) ? r.changes.filter(s) : [];
+      var stats = Array.isArray(r.stats) ? r.stats.filter(function(st){ return st && s(st[0]) && s(st[1]); }) : [];
       return h("div", {class:"rev"},
         h("div", {class:"rev-tag"}, h("b", {text: s(r.rev)}), s(r.date) ? h("span", {text: r.date}) : null),
         h("div", {class:"rev-body"},
           h("h3", {class:"rev-title", text: r.title}),
           s(r.why) ? h("p", {class:"rev-why", text: r.why}) : null,
+          stats.length ? h("div", {class:"rev-stats"}, stats.map(function(st){ return h("div", null, h("b", {text: st[0]}), h("span", {text: st[1]})); })) : null,
           changes.length ? h("ul", {class:"rev-changes"}, changes.map(function(c){ return h("li", {text: c}); })) : null,
           pics.length ? h("div", {class:"rev-pics"}, pics.map(function(im){
             return h("figure", null, h("img", {src: im.src, alt: s(im.caption) || r.title, loading:"lazy"}), s(im.caption) ? h("figcaption", {text: im.caption}) : null);

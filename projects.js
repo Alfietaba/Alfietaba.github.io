@@ -13,7 +13,7 @@ window.SITE = {
   email: "aastabac@uwaterloo.ca",
   linkedin: "https://www.linkedin.com/in/alfie-tabachnick-195706337",
   github: "https://github.com/Alfietaba",
-  resume: "",                      // put resume.pdf in this folder, then write "resume.pdf"
+  resume: "resume.pdf",            // put resume.pdf in this folder, then write "resume.pdf"
   photo: ""                        // put a photo in images/, then write "images/me.jpg"
 };
 
@@ -32,18 +32,107 @@ window.PROJECTS = [
     kind: "Midnight Sun solar car",
     discipline: "Mechanical",
     year: "2026",
-    summary: "A bolt-on lever mount for the solar car's parking brake that stays put, replacing one that only just passed scrutineering.",
+    summary: "A bolt-on mount for the solar car's parking brake lever, taken from a waterjet aluminum bracket to a printed two-piece clamshell over seven revisions.",
     body: `American Solar Challenge rules require a parking brake that holds the car in place and locks with one motion from the driver's seat. On MS16 the team used a bike brake pulled by a toggle clamp, and it only just passed scrutineering: slack crept into the cable, and the PLA mount kept sliding along the chassis tube.
 
-For the F26 dynamics design sprint we mapped every tube in the frame from the CAD and chose the bottom-front corner of the cockpit, where five tubes meet. It is right by the driver's left hand and on the same side as the bike brake, so the cable run stays short.
+The holder mounts the toggle clamp at the bottom-front corner of the cockpit on the left side, where the front hoop leg, the side diagonal, the bottom rail and two chassis-base tubes meet. That spot is by the driver's left hand and on the same side as the bike brake, so the cable run stays short. Every revision keeps the same three goals: it can't slide on the tubes, the cable loop closes inside one rigid part so it holds tension, and it needs no welding.
 
-Instead of gripping one tube, the bracket clamps onto two tubes that run in different directions, so it physically can't slide or twist and the thin tubes aren't over-tightened. There is no welding: small spacers make up the difference in tube sizes, and six bolts take it off. The toggle clamp, cable stop and barrel adjuster all sit on the same bracket, so the cable pull stays inside the part instead of tugging on the frame.
-
-A stress simulation showed one small notch carrying most of the load. A thicker plate and a bolted cable block moved the load into flat, solid metal. The bracket is a single waterjet-cut plate with one bend, and the clamp holes are drilled after bending using the clamp as a guide.
-
-Result: 3–4× stronger than required, 6 bolts to remove, 1 bend in the main bracket, and about 545 g for all the metal parts. Still to do: the piece that ties the cable to the latch, a driver hip-clearance check, and a re-run of the simulation once the final loads are in.`,
+The revision history below shows each version and what changed from the one before.`,
     link: "",
-    images: ["images/parking-brake-1.png", "images/parking-brake-2.png"]
+    images: ["images/pb-revF-iso.png"],
+    revisions: [
+      {
+        rev: "Rev A",
+        date: "Oct 27",
+        title: "Waterjet aluminum bracket, clamped to two tubes",
+        why: "First answer to the MS16 problems: replace the sliding PLA mount with metal that can't move.",
+        changes: [
+          "3/16\" 5052-H32 aluminum bracket, waterjet cut with two bends: web, lever shelf and a bent-up tab as the cable-housing stop.",
+          "Clamped with saddle caps to two tubes that run in different directions (one on the 1.5\" front leg, two on the 1.25\" diagonal), so the constraint comes from geometry rather than friction. Six #10-32 bolts, no welding.",
+          "Cable stop on the same part as the lever, plus an M10×1 barrel adjuster to take up slack before scrutineering.",
+          "About 375 g of parts plus 80 g of hardware."
+        ],
+        images: [
+          {src: "images/pb-revA-drivers-eye.png", caption: "Rev A from the driver's seat"},
+          {src: "images/pb-revA-outboard.png", caption: "Rev A from outside: caps on two crossing tubes"}
+        ]
+      },
+      {
+        rev: "Rev B",
+        date: "Oct 28",
+        title: "Stronger bracket and a bolted stop block",
+        why: "FEA at 900 N of cable tension found 344 MPa at the relief notch where the shelf ended, so Rev A would have yielded at roughly 500 N.",
+        changes: [
+          "1/4\" sheet with one bend instead of 3/16\" with two.",
+          "Bent tab replaced by a separate solid stop block bolted to the shelf, so the cable load never goes around a bend or a notch.",
+          "Thicker tube caps (5–5.7 mm of wall over the tube) and fine-thread #8-36 clamp screws.",
+          "Result: 53 MPa peak at 900 N (about 3.6× margin to yield) and 0.05 mm deflection. A 300 N push on the handle dropped from 135 MPa (SF 1.4) to 85 MPa (SF 2.3).",
+          "About 545 g of machined parts."
+        ],
+        images: [
+          {src: "images/pb-revB-fea.png", caption: "von Mises stress at 900 N cable tension: Rev A (left) vs Rev B (right)"}
+        ]
+      },
+      {
+        rev: "Rev C2",
+        date: "Nov 2",
+        title: "3D-printed two-piece clamshell with a load rib",
+        changes: [
+          "Switched from machined aluminum to two printed halves that clamp around the bottom rail, the diagonal and the front leg, split through the tube centres.",
+          "The inboard FRONT piece fills the V between the tubes so it's braced against the frame, and carries the lever shelf and cable stop. The outboard BACK piece holds the nuts.",
+          "New 10 mm triangular rib under the shelf at about 47°, so pushing the handle puts the rib in compression straight into the rail instead of bending the shelf root.",
+          "Five #10-32 bolts through both halves with a 1.5 mm gap at the split, so tightening clamps the tubes. Channels open up 2 mm near the node to clear the weld fillets.",
+          "Printed in PETG or tougher (not PLA, which softens and creeps)."
+        ],
+        images: [
+          {src: "images/pb-revC2-cockpit.png", caption: "Rev C2 from inside the cockpit"},
+          {src: "images/pb-revC2-rib.png", caption: "The load rib, seen from below"}
+        ]
+      },
+      {
+        rev: "Rev D",
+        date: "Nov 5",
+        title: "Rebuilt as native SolidWorks parts and simulated",
+        changes: [
+          "FRONT and BACK modeled feature by feature in SolidWorks: tube channels, clamp gap, #10-32 bolt holes and counterbores, lever shelf, cable stop, load rib, #8-36 clamp screw holes and the M10×1 adjuster hole.",
+          "Simulated in printed PETG with a 300 N push on the handle and 900 N on the cable stop: about 4.7 MPa peak stress."
+        ]
+      },
+      {
+        rev: "Rev E",
+        date: "Nov 11",
+        title: "Lighter FRONT, features moved to BACK, metric hardware",
+        changes: [
+          "Lever shelf, clamp pad, three shelf ribs and the braced cable stop moved from the FRONT piece to the BACK piece.",
+          "Weight-saving windows cut into both halves. FRONT went from 426 to 227 cm³ and the pair from about 622 to 524 cm³.",
+          "#10-32 bolts replaced with M4 bolts and nylon-insert nuts sitting in printed hex pockets. Material set to ABS.",
+          "All 31 sketches fully defined, driven by 62 equations, and placed on the chassis model with zero interferences."
+        ]
+      },
+      {
+        rev: "Rev F",
+        date: "Nov 12",
+        title: "Tapped cable adjuster, real mates and the two-thread rule",
+        changes: [
+          "Cable stop hole tapped M10×1 for a modeled barrel adjuster, and pockets added for the bolt heads.",
+          "Assemblies built with real mates instead of fixed parts: 155 mates, none failed, and zero clashes with the chassis.",
+          "Checked every bolt against the two-thread rule (at least two threads past the nut): all 11 pass."
+        ],
+        images: [
+          {src: "images/pb-revF-outboard.png", caption: "Rev F: lever, cable and adjuster on the BACK piece"},
+          {src: "images/pb-revF-in-car.png", caption: "Rev F on the chassis at the bottom-front cockpit node"}
+        ]
+      },
+      {
+        rev: "#8-32",
+        date: "Nov 12–16",
+        title: "Rule-compliant hardware and seat clearance",
+        changes: [
+          "M4 hardware swapped for McMaster #8-32 socket head screws with all-metal Flex-Top locknuts, as the sprint rules ask for on brake fasteners. All bolts still pass the two-thread rule (6.4–7.1 threads past the nut).",
+          "Checked against the seat and front mount in the sprint assembly: at least 40.8 mm of clearance, and 59.3 mm at the lever."
+        ]
+      }
+    ]
   },
   {
     id: "midterm-gym",
@@ -71,8 +160,9 @@ Ambient light caused false triggers, so I designed two-stage sensor tunnels with
 
 The signal chain depended on fragile software (a Hairless MIDI bridge and the Mac IAC Driver). Switching to an ATmega32U4 Pro Micro gave native USB MIDI and removed that software entirely.
 
-The result is a fully working, Class 3R-safe (≤5 mW) instrument for about $100 CAD.`,
-    link: "",
+The result is a fully working, Class 3R-safe (≤5 mW) instrument for about $100 CAD. The video on GitHub shows it being played.`,
+    link: "https://github.com/Alfietaba/Laser-Harp",
+    linkText: "Watch the video ↗",
     images: []
   },
   {

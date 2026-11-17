@@ -87,16 +87,37 @@ function viewProject(p, i){
         h("div", {class:"label", style:"padding:0"}, h("span", {text:"Project " + num(i)})),
         h("h1", {class:"proj-title", text: p.title || "Untitled project"}),
         s(p.summary) ? h("p", {class:"proj-summary", text: p.summary}) : null,
-        s(p.link) ? h("div", null, link("pill", p.link, "Open the project ↗")) : null),
+        s(p.link) ? h("div", null, link("pill", p.link, s(p.linkText) || "Open the project ↗")) : null),
       facts.length ? h("div", {class:"facts"}, facts.map(function(f){ return h("div", {class:"fact"}, h("b", {text: f[0]}), h("span", {text: String(f[1])})); })) : null,
       images.length ? h("figure", {class:"cover"}, h("img", {src: images[0], alt: (p.title || "Project") + " cover image"})) : null,
       paras.length ? h("div", {class:"prose"}, paras.map(function(t){ return h("p", {text: t.trim()}); })) : h("div", {style:"height:48px"}),
       images.length > 1 ? h("div", {class:"gallery"}, images.slice(1).map(function(src, n){ return h("img", {src: src, alt: (p.title || "Project") + " image " + (n + 2), loading:"lazy"}); })) : null,
+      revisions(p),
       next ? h("a", {class:"next", href:"#p-" + next.id},
         h("span", {class:"row-meta", style:"flex:none", text:"Next project"}),
         h("span", {class:"row-title", style:"flex:none", text: (next.title || "Untitled project") + " →"})) : null),
     footer()
   ];
+}
+/* Optional design history: p.revisions = [{ rev, date, title, changes: [..], why, images: [{src, caption}] }] */
+function revisions(p){
+  var revs = Array.isArray(p.revisions) ? p.revisions.filter(function(r){ return r && s(r.title); }) : [];
+  if (!revs.length) return null;
+  return h("section", {class:"revs"},
+    h("div", {class:"label"}, h("span", {text:"Revision history"}), h("span", {text: revs.length + " revisions"})),
+    revs.map(function(r){
+      var pics = Array.isArray(r.images) ? r.images.filter(function(im){ return im && s(im.src); }) : [];
+      var changes = Array.isArray(r.changes) ? r.changes.filter(s) : [];
+      return h("div", {class:"rev"},
+        h("div", {class:"rev-tag"}, h("b", {text: s(r.rev)}), s(r.date) ? h("span", {text: r.date}) : null),
+        h("div", {class:"rev-body"},
+          h("h3", {class:"rev-title", text: r.title}),
+          s(r.why) ? h("p", {class:"rev-why", text: r.why}) : null,
+          changes.length ? h("ul", {class:"rev-changes"}, changes.map(function(c){ return h("li", {text: c}); })) : null,
+          pics.length ? h("div", {class:"rev-pics"}, pics.map(function(im){
+            return h("figure", null, h("img", {src: im.src, alt: s(im.caption) || r.title, loading:"lazy"}), s(im.caption) ? h("figcaption", {text: im.caption}) : null);
+          })) : null));
+    }));
 }
 function render(){
   var hash = location.hash || "#home", isProject = hash.indexOf("#p-") === 0, nodes, idx = -1;

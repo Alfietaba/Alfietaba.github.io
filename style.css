@@ -115,6 +115,11 @@ img{max-width:100%;display:block}
 .rev-pics img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff}
 .rev-pics figcaption{font-size:13px;color:var(--dim);padding-top:8px}
 
+/* ascii shark (shark.js) */
+.shark{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;opacity:.85}
+.shark-bite{position:absolute;z-index:4;pointer-events:none;background:var(--bg);transform:rotate(var(--rot));animation:shark-bite .14s ease-out}
+@keyframes shark-bite{from{transform:rotate(var(--rot)) scale(.2)}to{transform:rotate(var(--rot)) scale(1)}}
+
 /* editor dialog */
 .veil{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;z-index:10}
 .veil[hidden]{display:none}

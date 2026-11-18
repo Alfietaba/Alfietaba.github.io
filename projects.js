@@ -194,19 +194,48 @@ The result is a fully working, Class 3R-safe (≤5 mW) instrument for about $100
     images: []
   },
   {
-    id: "vex-robot",
-    title: "VEX V5 Competition Robot",
+    id: "vex-push-back",
+    title: "VEX V5 Robot: Push Back",
+    kind: "Competition robot · Team 32032T",
+    discipline: "Robotics",
+    year: "2025–26",
+    summary: "A block-scoring robot with a tall frame, an angled chain conveyor and a roller scorer. It reached the finals at the Niagara Battlefields VEX V5 Competition.",
+    body: `In Push Back, robots collect blocks and score them in goals, including a long goal raised above the field. This was the second robot I led the design and build of for the TanenbaumCHAT robotics team, which I founded.
+
+The robot is a tall box frame of aluminum C-channel, so blocks travel up through the inside. A mesh-covered plate at the front guides blocks into an angled chain conveyor with flexible flaps, which pulls them up a mesh ramp. At the top, rubber-band-wrapped rollers push the blocks out into the goal. It drives on omni and traction wheels, and the autonomous and driver-control code is written in VEXcode.
+
+Scoring was unreliable at first, so I made the mechanisms more tolerant, using flexible wheels and elastic suspension so blocks still fed through when they weren't lined up perfectly.
+
+How it's different from my first robot (High Stakes): the High Stakes robot was low and open, built to grab a mobile goal with a pneumatic clamp and carry it around, with a ring intake running up over the top of the chassis. Push Back is the opposite approach. Instead of carrying a goal, the robot carries the game pieces itself: blocks are pulled in at the front and travel up through a tall, enclosed box frame on an internal conveyor, then get pushed out at the top into goals raised above the field. That meant designing for height and a long, controlled path for each block rather than a strong grip on one goal. The pneumatic clamp and air tank gave way to a chain conveyor, a mesh ramp and rubber-band rollers, and the intake went from spinning rollers to a mesh guide plate that funnels blocks into the conveyor.
+
+The robot advanced to the finals at the Niagara Battlefields VEX V5 Competition (about 20 teams). Off the field, I recruited 80 members and split them into drivetrain, intake, scoring and autonomous sub-teams, and the club won Best Club Award (2026) out of more than 200 clubs.`,
+    link: "https://github.com/Alfietaba/VEX-V5-Robots",
+    linkText: "Photos and videos on GitHub ↗",
+    images: ["images/vex-push-back-1.jpg", "images/vex-push-back-2.jpg", "images/vex-push-back-3.jpg"],
+    videos: [
+      {src: "images/vex-push-back-intake.mp4", poster: "images/vex-push-back-intake.jpg", caption: "Driving up and running a block through the intake"},
+      {src: "images/vex-push-back-drive.mp4", poster: "images/vex-push-back-drive.jpg", caption: "Driving and turning during testing"}
+    ]
+  },
+  {
+    id: "vex-high-stakes",
+    title: "VEX V5 Robot: High Stakes",
     kind: "Competition robot",
     discipline: "Robotics",
-    year: "2024–2026",
-    summary: "Two competition robots for autonomous and driver-control tasks, built by a team I founded.",
-    body: `I taught myself the VEX V5 platform from scratch and led the design and build of two robots. I built and designed the chassis, drivetrains, intake and loading system, scorer and parking mechanisms.
+    year: "2024–25",
+    summary: "A ring-scoring robot with a pneumatic mobile-goal clamp and a chain hook intake, my first VEX V5 build.",
+    body: `In High Stakes, robots pick up rings and score them on stakes, including mobile goals a robot can grab and carry. This was the first robot I built after teaching myself the VEX V5 platform from scratch and founding the TanenbaumCHAT robotics team.
 
-Scoring was unreliable, so I switched to tolerant designs with flexible wheels and elastic suspension.
+A pneumatic piston, fed from an onboard air tank with a pressure gauge, drives a clamp at the back of the robot, so it can grab a mobile goal and carry it while scoring. An angled chain conveyor runs from the front intake up to the top, where a large red gear drives the top roller, lifting rings up and onto the goal.
 
-I founded the school's competitive robotics team, recruited 80 members, and organized them into drivetrain, intake, scoring and autonomous sub-teams. The robot advanced to the finals at the Niagara Battlefields VEX V5 Competition (about 20 teams), and the team won Most Improved Club (2025) and Best Club Award (2026) out of more than 200 clubs.`,
-    link: "",
-    images: []
+The V5 Brain sits in the middle of a drive base with omni and traction wheels. The club won Most Improved Club (2025) that season, out of more than 200 clubs.`,
+    link: "https://github.com/Alfietaba/VEX-V5-Robots",
+    linkText: "Photos and videos on GitHub ↗",
+    images: ["images/vex-high-stakes-1.jpg", "images/vex-high-stakes-2.jpg", "images/vex-high-stakes-3.jpg"],
+    videos: [
+      {src: "images/vex-high-stakes-clamp-1.mp4", poster: "images/vex-high-stakes-clamp-1.jpg", caption: "Driving up to a mobile goal and clamping it"},
+      {src: "images/vex-high-stakes-clamp-2.mp4", poster: "images/vex-high-stakes-clamp-2.jpg", caption: "Grabbing a mobile goal and driving off with it"}
+    ]
   },
   {
     id: "big-data-bowl",

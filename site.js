@@ -92,12 +92,25 @@ function viewProject(p, i){
       images.length ? h("figure", {class:"cover"}, h("img", {src: images[0], alt: (p.title || "Project") + " cover image"})) : null,
       paras.length ? h("div", {class:"prose"}, paras.map(function(t){ return h("p", {text: t.trim()}); })) : h("div", {style:"height:48px"}),
       images.length > 1 ? h("div", {class:"gallery"}, images.slice(1).map(function(src, n){ return h("img", {src: src, alt: (p.title || "Project") + " image " + (n + 2), loading:"lazy"}); })) : null,
+      videos(p),
       revisions(p),
       next ? h("a", {class:"next", href:"#p-" + next.id},
         h("span", {class:"row-meta", style:"flex:none", text:"Next project"}),
         h("span", {class:"row-title", style:"flex:none", text: (next.title || "Untitled project") + " →"})) : null),
     footer()
   ];
+}
+/* Optional clips: p.videos = [{ src, poster, caption }] (MP4 files in images/) */
+function videos(p){
+  var vids = Array.isArray(p.videos) ? p.videos.filter(function(v){ return v && s(v.src); }) : [];
+  if (!vids.length) return null;
+  return h("section", {class:"vids"},
+    h("div", {class:"label"}, h("span", {text:"Video"}), h("span", {text: vids.length + (vids.length === 1 ? " clip" : " clips")})),
+    h("div", {class:"vid-grid"}, vids.map(function(v){
+      return h("figure", null,
+        h("video", {src: v.src, poster: s(v.poster) || null, controls: true, playsinline: true, preload: "metadata", muted: true}),
+        s(v.caption) ? h("figcaption", {text: v.caption}) : null);
+    })));
 }
 /* Optional design history: p.revisions = [{ rev, date, title, why, stats: [[label, value]], changes: [..], images: [{src, caption}] }] */
 function revisions(p){
